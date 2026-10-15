@@ -5,6 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
+from app.routers import auth
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -15,7 +16,8 @@ async def lifespan(app:FastAPI):
     # Shutdown code can be added here
 
 
-app = FastAPI(title="FastAPI with SQLAlchemy", description="A simple FastAPI application with SQLAlchemy integration.", version="1.0.0")
+app = FastAPI(title="FastAPI with SQLAlchemy", description="A simple FastAPI application with SQLAlchemy integration.", version="1.0.0", lifespan=lifespan)
+app.include_router(auth.router)
 
 @app.get("/health", summary="Health Check", description="Check the health of the application.")
 def health_check(db: Session = Depends(get_db)):
