@@ -46,7 +46,7 @@ def request_otp(body: OTPRequest, db: Session = Depends(get_db)):
         .select_from(OTPCode)
         .where(OTPCode.phone_number == body.phone_number, OTPCode.created_at >= window_start)
     )
-    print(f"Mein pagal ho gaya hu -> {recent}")
+    
     if recent >= settings.otp_max_requests_per_window:
         raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "Too many OTP requests. Try again later.")
 
