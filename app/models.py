@@ -1,7 +1,7 @@
 import uuid
-from datetime import datetime, time, timezone
+from datetime import datetime, date, timezone
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, UUID
+from sqlalchemy import Date, Integer, String, DateTime, ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -16,6 +16,13 @@ class User(Base):
     id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     phone_number:Mapped[str] = mapped_column(String(20), unique=True, nullable=False, index=True)
     is_active: Mapped[bool] = mapped_column(default=True)
+
+    # Profile (all optional: filled in after first login)
+    name: Mapped[str | None] = mapped_column(String(100), default=None)
+    date_of_birth: Mapped[date | None] = mapped_column(Date, default=None)
+    state: Mapped[str | None] = mapped_column(String(60), default=None)
+    avatar_key:Mapped[str | None] = mapped_column(String(100), default=None)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
